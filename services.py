@@ -58,4 +58,3 @@ def startServices():
 if __name__ == "__main__":
     getEverybodyHistoryFromSpotify()
     make_everybody_playlists()
-

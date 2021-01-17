@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `track_artist`
 CREATE TABLE IF NOT EXISTS `history`
 (
     his_id        INTEGER NOT NULL PRIMARY KEY,
-    use_username        INTEGER NOT NULL,
+    use_username  INTEGER NOT NULL,
     tra_id        INTEGER NOT NULL,
     his_played_at TEXT    NOT NULL,
     FOREIGN KEY (tra_id) REFERENCES `track` (tra_id),
