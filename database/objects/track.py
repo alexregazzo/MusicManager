@@ -83,7 +83,7 @@ class Track(Base):
 
     def requestAlbum(self):
         raw_track = SpotifyClient.getTrack(self.tra_id)
-        album = Album.createRawSimplified(raw_track["album"])
+        album = Album.createRawSimplified(raw_track["album"], onExistRaiseError=False)
         self.alb_id = album.alb_id
         self.update()
 
