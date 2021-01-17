@@ -131,22 +131,11 @@ def api_v1_auth_token_get():
 
 @apiv1.route("/api/v1/auth/spotify/token")
 @api_authenticate
-def api_v1_auth_spotify_token():
-    tokenapp_access_token = request.args.get('token', None)
-    if tokenapp_access_token is None:
-        return Response("Token não informado", status=401)
-    try:
-        tokenapp = database.objects.TokenApp.get(tok_access_token=tokenapp_access_token)
-    except database.objects.exceptions.ObjectDoesNotExistError:
-        return Response("Token inválido", status=401)
-    else:
-        if tokenapp.tok_active:
-            user = database.objects.User.get(use_username=tokenapp.use_username)
-            g.user = user
-            session["use_username"] = user.use_username
-            return redirect(url_for("spotify_authentication_acquire", fromapiv1="true"))
-        else:
-            return Response("Acesso negado", status=403)
+def api_v1_auth_spotify_token(tokenapp:database.objects.TokenApp):
+    user = database.objects.User.get(use_username=tokenapp.use_username)
+    g.user = user
+    session["use_username"] = user.use_username
+    return redirect(url_for("spotify_authentication_acquire", fromapiv1="true"))
 
 
 @apiv1.route("/api/v1/auth/spotify/get/exist")
