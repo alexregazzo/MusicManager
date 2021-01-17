@@ -1,0 +1,10 @@
+[Unit]
+Description=My service for website and app server
+
+[Service]
+Type=simple
+ExecStart=sudo python3.9 /home/pi/Desktop/MusicManager/app.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
