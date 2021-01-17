@@ -1,0 +1,58 @@
+body {
+    width: 100%;
+    background-color: cornflowerblue;
+    font-size: 1em;
+    text-align: center;
+    min-width: 300px;
+}
+
+.sectiontitle {
+    padding: 20px;
+}
+
+.helpbox {
+    position: relative;
+    display: inline-block;
+}
+
+.helpbox .helptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: black;
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    padding: 10px;
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    z-index: 1;
+}
+
+.helpbox:hover .helptext {
+    visibility: visible;
+}
+
+.formulario {
+    text-align: left;
+}
+
+.formulario td:nth-child(1) {
+    width: 175px;
+}
+
+.formulario td:nth-child(2) {
+    width: 250px;
+}
+
+
+.formulario td input {
+    width: 100%;
+    border-radius: 6px;
+    padding: 0 7px;
+}
+
+
+form {
+    display: inline-block;
+}

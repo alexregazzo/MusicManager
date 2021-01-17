@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Visão Geral</title>
+    <script src="https://kit.fontawesome.com/70f7bca1e7.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cssreset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/messages.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/overview.css') }}">
+    <style>
+        /*.background-animation {*/
+        /*    position: fixed;*/
+        /*    background-color: red;*/
+        /*    width: 100%;*/
+        /*    height: 100%;*/
+        /*    overflow: visible;*/
+        /*}*/
+
+        /*.background-animation .bar {*/
+        /*    padding: 0;*/
+        /*    margin: 0;*/
+        /*    display: inline-block;*/
+        /*    width: 19%;*/
+        /*    height: 10px;*/
+        /*    border: 1px solid black;*/
+        /*    background-color: grey;*/
+        /*    z-index: 1000;*/
+        /*}*/
+    </style>
+</head>
+<body>
+<header class="menu">
+    <a href="{{ url_for('page_overview') }}">
+        <i title="Inicio" class="fas fa-home"></i>
+    </a>
+    <a href="{{ url_for('page_logs') }}">
+        <i title="Registros" class="fas fa-sticky-note"></i>
+    </a>
+    <div class="right-content">
+        <a href="{{ url_for('page_settings') }}">
+            <i title="Configurações" class="fas fa-cog"></i>
+        </a>
+        <a href="{{ url_for('logout') }}">
+            <i title="Sair" class="fas fa-sign-out-alt"></i>
+        </a>
+    </div>
+</header>
+<nav>
+    <section class="messages">
+        <p class="error_message">{{ error_message }}</p>
+        <p class="success_message">{{ success_message }}</p>
+    </section>
+    <section>
+        <a href="{{ '#' if token else url_for('spotify_authentication_acquire') }}">
+            <i class="fab fa-spotify spotify-icon {{ 'set' if token else 'not-set' }}" title="{{ 'Vinculado' if token else 'Não vinculado, clique para vincular' }}"></i>
+        </a>
+    </section>
+    <section class="execucoes">
+        <h2 class="section-title">Últimas Execuções</h2>
+        <table>
+            <thead>
+            <tr>
+                <!--                <th></th>-->
+                <th> Música</th>
+                <th> Artista</th>
+                <th> Horário</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for history in histories %}
+                <tr>
+                    <!--                <td>-->
+                    <!--                    <audio controls>-->
+                    <!--                        <source src="{{history.track.tra_preview_url}}" type="audio/mpeg">-->
+                    <!--                        Seu navegador não suporta audio.-->
+                    <!--                    </audio>-->
+                    <!--                </td>-->
+                    <td> {{ history.track.tra_name }}</td>
+                    <td> {{ history.track.artists|map(attribute='art_name')|join(", ") }}</td>
+                    <td> {{ history.his_played_at|formatdate }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </section>
+</nav>
+</body>
+</html>
+
+<!--
+Mostrar playlist em "tempo real"
+-->

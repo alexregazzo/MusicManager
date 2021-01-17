@@ -1,0 +1,14 @@
+.messages p {
+    margin-top: 10px;
+    background-color: black;
+    width: 100%;
+    padding: 0 10px;
+}
+
+.error_message {
+    color: red;
+}
+
+.success_message {
+    color: lime;
+}

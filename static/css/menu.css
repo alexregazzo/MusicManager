@@ -1,0 +1,32 @@
+.menu {
+    margin-top: 10px;
+    align-content: center;
+    text-align: center;
+    width: 100%;
+    background-color: black;
+}
+
+.menu a {
+    font-size: 3em;
+    text-decoration: none;
+    color: black;
+    animation: menucoloranimation 3s infinite alternate;
+}
+
+.menu .right-content {
+    display: inline-block;
+    position: absolute;
+    right: 10%;
+}
+
+@keyframes menucoloranimation {
+    0% {
+        color: #0f0;
+    }
+    50% {
+        color: #ff0;
+    }
+    100% {
+        color: #f00;
+    }
+}

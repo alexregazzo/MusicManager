@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Playlist Automator - Sign Up</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
+    <script>
+        document.onkeydown = function (evt) {
+            if (evt.key === "Enter") {
+                document.querySelector('form').submit()
+            }
+        }
+    </script>
+</head>
+<body>
+<header>
+    <img id="logo" src="{{ url_for('static', filename='assets/arrowButton.svg') }}" alt="Símbolo de Play">
+    <p class="logo-text">Music Manager</p>
+</header>
+<main>
+    <form method="post">
+        <p class="error_message">{{ error_message }}</p>
+        <p class="success_message">{{ success_message }}</p>
+        <input type="text" name="user_username" id="use_username" required placeholder="Nome*">
+        <input type="email" name="user_email" id="use_email" placeholder="Email">
+        <input type="password" name="user_password" id="use_password" required placeholder="Senha*">
+        <a href="{{ url_for('page_login') }}">Log In</a>
+    </form>
+    <button id="main-btn" onclick="if(document.querySelector('form').checkValidity()) document.querySelector('form').submit(); else alert('Formulário incorreto')">>
+    </button>
+</main>
+</body>
+</html>

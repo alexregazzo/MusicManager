@@ -1,0 +1,72 @@
+body {
+    width: 100%;
+    background-color: cornflowerblue;
+    font-size: 1em;
+    text-align: center;
+    min-width: 300px;
+    min-height: 95vh;
+    border: 1px solid black;
+}
+
+.section-title {
+    padding: 15px;
+}
+
+.execucoes {
+    width: 100%;
+}
+
+.execucoes table {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+
+.execucoes table thead tr {
+    background-color: cadetblue;
+}
+
+.execucoes table tbody tr:nth-child(odd) {
+    background-color: blueviolet;
+}
+
+.execucoes table tbody tr:nth-child(even) {
+    background-color: dodgerblue;
+}
+
+.spotify-icon {
+    font-size: 3em;
+    position: absolute;
+    display: block;
+    padding: 15px;
+    right: 10px;
+
+}
+
+.spotify-icon.set {
+    color: lime;
+}
+
+.spotify-icon.not-set {
+    color: grey;
+    animation: spotify_animation_icon 3s infinite;
+}
+
+
+@keyframes spotify_animation_icon {
+    0% {
+        font-size: 3em;
+    }
+    5% {
+        font-size: 2em;
+    }
+    20% {
+        font-size: 5em;
+    }
+    100% {
+        font-size: 3em;
+    }
+
+}
