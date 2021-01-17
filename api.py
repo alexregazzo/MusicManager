@@ -135,7 +135,7 @@ def api_v1_auth_spotify_token(tokenapp:database.objects.TokenApp):
     user = database.objects.User.get(use_username=tokenapp.use_username)
     g.user = user
     session["use_username"] = user.use_username
-    return redirect(url_for("spotify_authentication_acquire", fromapiv1="true"))
+    return redirect(url_for("spotify_authentication_acquire", fromapp="true"))
 
 
 @apiv1.route("/api/v1/auth/spotify/get/exist")

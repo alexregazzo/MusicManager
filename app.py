@@ -237,7 +237,6 @@ def spotify_authentication_acquire():
         state = utils.gen_salt(random.randint(10, 50))
         use_username = g.user.use_username
         create_spotify_auth_process(use_username, state, fromapp=fromapp)
-        print(url_for("spotify_authentication_response", _external=True))
         return redirect(spotify.utils.makeSignInURL(
             client_id=spotify.CLIENT_ID,
             redirect_uri=url_for("spotify_authentication_response", _external=True),
