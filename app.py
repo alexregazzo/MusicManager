@@ -164,13 +164,13 @@ def page_signup():
 @app.route("/logs")
 @authenticate
 def page_logs():
-    history_runs = reversed(
-        database.objects.Run.getAll(use_username=g.user.use_username, run_type=database.objects.Run.TYPE_GET_HISTORY,
-                                    order_by=[("run_datetime", "DESC")], limit=10))
+    history_runs = database.objects.Run.getAll(use_username=g.user.use_username,
+                                               run_type=database.objects.Run.TYPE_GET_HISTORY,
+                                               order_by=[("run_datetime", "DESC")], limit=10)
 
-    make_playlist_runs = reversed(
-        database.objects.Run.getAll(use_username=g.user.use_username, run_type=database.objects.Run.TYPE_MAKE_PLAYLIST,
-                                    order_by=[("run_datetime", "DESC")], limit=10))
+    make_playlist_runs = database.objects.Run.getAll(use_username=g.user.use_username,
+                                                     run_type=database.objects.Run.TYPE_MAKE_PLAYLIST,
+                                                     order_by=[("run_datetime", "DESC")], limit=10)
 
     return render_template("logs.html", history_runs=history_runs, make_playlist_runs=make_playlist_runs)
 
@@ -183,8 +183,8 @@ def page_overview():
     except database.objects.exceptions.ObjectDoesNotExistError:
         token = None
 
-    histories = reversed(database.objects.History.getAll(use_username=g.user.use_username, limit=10,
-                                                         order_by=[("his_played_at", "DESC")]))
+    histories = database.objects.History.getAll(use_username=g.user.use_username, limit=10,
+                                                order_by=[("his_played_at", "DESC")])
 
     return render_template("overview.html", **request.args, token=token, user=g.user, histories=histories)
 
