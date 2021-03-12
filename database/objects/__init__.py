@@ -1,5 +1,4 @@
 from .tokenspotify import TokenSpotify
-from .artist import Artist
 from .track import Track
 from .history import History
 from .tokenapp import TokenApp
@@ -8,4 +7,3 @@ from .playlist import Playlist
 from .user import User
 from .run import Run
 from .album_image import Album_Image
-from .runlogger import RunLogger

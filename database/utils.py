@@ -36,7 +36,7 @@ def make_insert(*args: str, t_name: str) -> str:
 
 
 def make_select(*args: str, t_name: str) -> str:
-    return F"""SELECT * FROM`{t_name}` {f" WHERE {_make_equal_where(*args)}" if args else ""}"""
+    return F"""SELECT * FROM `{t_name}` {f" WHERE {_make_equal_where(*args)}" if args else ""}"""
 
 
 def make_update(*, set_list: typing.List[str], where_list: typing.List[str], t_name: str) -> str:

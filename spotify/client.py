@@ -40,7 +40,8 @@ class SpotifyClient(SpotifyBase):
                 return None
         nheaders = {'Authorization': f'Bearer {cls.TOKEN}'}
         nheaders.update(headers if headers is not None else {})
-        return cls.makeRequest(url=url, method=method, params=params, data=data, headers=nheaders, ignore_text_response=ignore_text_response)
+        return cls.makeRequest(url=url, method=method, params=params, data=data, headers=nheaders,
+                               ignore_text_response=ignore_text_response)
 
     @classmethod
     def getToken(cls) -> bool:

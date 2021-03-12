@@ -18,7 +18,7 @@ class Base:
                 dic[k] = v
         return dic
 
-    def json(self):
+    def json(self, *args):
         return self.database_params()
 
     def __repr__(self) -> str:
@@ -90,6 +90,7 @@ class Base:
             raise ObjectDoesNotExistError()
 
     @classmethod
-    def getAll(cls, limit: int = None, order_by: typing.List[typing.Tuple[str, str]] = None, **kwargs) -> typing.List[T]:
+    def getAll(cls, limit: int = None, order_by: typing.List[typing.Tuple[str, str]] = None, **kwargs) -> typing.List[
+        T]:
         # noinspection PyArgumentList
         return [cls(**x) for x in cls._select(**kwargs, order_by=order_by, limit=limit)]

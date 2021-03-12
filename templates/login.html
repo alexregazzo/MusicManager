@@ -29,7 +29,9 @@
         <input type="password" name="user_password" id="use_password" required placeholder="Senha*">
         <a href="{{ url_for('page_signup') }}">Sign Up</a>
     </form>
-    <button id="main-btn" onclick="if(document.querySelector('form').checkValidity()) document.querySelector('form').submit(); else alert('Formulário incorreto')">>
+    <button id="main-btn"
+            onclick="if(document.querySelector('form').checkValidity()) document.querySelector('form').submit(); else alert('Formulário incorreto')">
+        >
     </button>
 </main>
 </body>

@@ -26,7 +26,8 @@ class SpotifyUser(SpotifyBase):
 
         nheaders = {'Authorization': f'Bearer {self.token.tok_access_token}'}
         nheaders.update(headers if headers is not None else {})
-        return self.makeRequest(url=url, method=method, params=params, data=data, headers=nheaders, ignore_text_response=ignore_text_response)
+        return self.makeRequest(url=url, method=method, params=params, data=data, headers=nheaders,
+                                ignore_text_response=ignore_text_response)
 
     def refreshToken(self) -> None:
         data = self.makeRequest(*spotify.REFRESH_TOKEN_ENDPOINT,
@@ -65,7 +66,8 @@ class SpotifyUser(SpotifyBase):
         return self.request(spotify.CHANGE_DETAILS_ENDPOINT[0],
                             spotify.CHANGE_DETAILS_ENDPOINT[1].format(playlist_id=playlist_id))
 
-    def changePlaylistDetails(self, playlist_id: str, name: str = None, public: bool = None, collaborative: bool = None, description: str = None) -> bool:
+    def changePlaylistDetails(self, playlist_id: str, name: str = None, public: bool = None, collaborative: bool = None,
+                              description: str = None) -> bool:
         data = {}
         if name is not None:
             data["name"] = name
@@ -103,7 +105,8 @@ class SpotifyUser(SpotifyBase):
             data=json.dumps({"public": public}),
             ignore_text_response=True)
 
-    def createPlaylist(self, playlist_name: str, public: bool = True, collaborative: bool = False, description: str = None) -> spotify.hints.Playlist:
+    def createPlaylist(self, playlist_name: str, public: bool = True, collaborative: bool = False,
+                       description: str = None) -> spotify.hints.Playlist:
         return self.request(*spotify.CREATE_PLAYLIST_ENDPOINT,
                             data=json.dumps({
                                 "name": playlist_name,

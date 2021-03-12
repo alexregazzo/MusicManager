@@ -2,7 +2,7 @@ from __future__ import annotations
 from .base import Base
 from .exceptions import *
 import spotify.hints
-from .artist import Artist
+from artist import Artist
 from .track_artist import Track_Artist
 from .album import Album
 import utils
@@ -20,7 +20,8 @@ class Track(Base):
                  tra_name: str,
                  tra_preview_url: str,
                  tra_uri: str,
-                 alb_id: str = None):
+                 alb_id: str = None,
+                 **kwargs):
         self.tra_id = tra_id
         self.tra_duration_ms = tra_duration_ms
         self.tra_href = tra_href
@@ -29,6 +30,14 @@ class Track(Base):
         self.tra_uri = tra_uri
         self.alb_id = alb_id
         self._artists = None
+
+    def __eq__(self, other: typing.Union[Track, str]) -> bool:
+        if type(other) is Track:
+            return self.tra_id == other.tra_id
+        elif type(other) is str:
+            return self.tra_id == other
+        else:
+            raise NotImplementedError(F"Cannot compare Track with '{type(other)}'")
 
     @classmethod
     def create(cls, *,
@@ -65,15 +74,24 @@ class Track(Base):
             self._artists = artists
         return self._artists
 
-    def json(self) -> dict:
-        return {"tra_id": self.tra_id,
-                "tra_duration_ms": self.tra_duration_ms,
-                "tra_href": self.tra_href,
-                "tra_name": self.tra_name,
-                "tra_preview_url": self.tra_preview_url,
-                "tra_uri": self.tra_uri,
-                "artists": self.artists,
-                "album": self.album}
+    def json(self, *args) -> dict:
+        addons = {
+            "track_artists": lambda: {"artists": self.artists},
+            "track_album": lambda: {"album": self.album}
+        }
+
+        jsonobj = {"tra_id": self.tra_id,
+                   "tra_duration_ms": self.tra_duration_ms,
+                   "tra_href": self.tra_href,
+                   "tra_name": self.tra_name,
+                   "tra_preview_url": self.tra_preview_url,
+                   "tra_uri": self.tra_uri,
+                   "json_arguments": list(addons.keys())}
+        for arg in args:
+            if arg in addons:
+                jsonobj.update(addons[arg]())
+
+        return jsonobj
 
     @property
     def album(self):
@@ -88,7 +106,8 @@ class Track(Base):
         self.update()
 
     @classmethod
-    def createSimplifiedRaw(cls, *, simpleRawTrack: spotify.hints.SimplifiedTrack, onExistRaiseError: bool = True) -> Track:
+    def createSimplifiedRaw(cls, *, simpleRawTrack: spotify.hints.SimplifiedTrack,
+                            onExistRaiseError: bool = True) -> Track:
         tra_id = simpleRawTrack["id"]
         try:
             track = cls.create(tra_id=simpleRawTrack["id"],

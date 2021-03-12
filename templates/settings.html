@@ -49,7 +49,8 @@
                         </div>
                     </td>
                     <td>
-                        <input id="user_username" name="user_username" type="text" value="{{ user.use_username }}" required>
+                        <input id="user_username" name="user_username" type="text" value="{{ user.use_username }}"
+                               required>
                     </td>
                 </tr>
                 <tr>
@@ -57,11 +58,13 @@
                         <label for="user_email">E-mail</label>
                         <div class="helpbox">
                             <i class="fas fa-question-circle" aria-hidden="true"></i>
-                            <p class="helptext">E-mail serve para o envio de notificações sobre acontecimentos de eventos importantes (em desenvolvimento)</p>
+                            <p class="helptext">E-mail serve para o envio de notificações sobre acontecimentos de
+                                eventos importantes (em desenvolvimento)</p>
                         </div>
                     </td>
                     <td>
-                        <input id="user_email" name="user_email" type="email" value="{{ user.use_email if user.use_email else '' }}">
+                        <input id="user_email" name="user_email" type="email"
+                               value="{{ user.use_email if user.use_email else '' }}">
                     </td>
                 </tr>
                 <tr>

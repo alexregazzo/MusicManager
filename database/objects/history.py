@@ -47,15 +47,23 @@ class History(Base):
             self._track = Track.get(tra_id=self.tra_id)
         return self._track
 
-    def json(self) -> dict:
-        return {"his_id": self.his_id,
-                "use_username": self.use_username,
-                "tra_id": self.tra_id,
-                "track": self.track,
-                "his_played_at": self.his_played_at}
+    def json(self, *args) -> dict:
+        addons = {
+            "history_track": lambda: {"track": self.track}
+        }
+        jsonobj = {"his_id": self.his_id,
+                   "use_username": self.use_username,
+                   "tra_id": self.tra_id,
+                   "his_played_at": self.his_played_at,
+                   "json_arguments": list(addons.keys())}
+        for arg in args:
+            if arg in addons:
+                jsonobj.update(addons[arg]())
+        return jsonobj
 
     @classmethod
-    def createMultipleRaw(cls, *, use_username: int, raw_histories: typing.List[spotify.hints.PlayHistory], onExistRaiseError: bool = True) -> typing.List[History]:
+    def createMultipleRaw(cls, *, use_username: int, raw_histories: typing.List[spotify.hints.PlayHistory],
+                          onExistRaiseError: bool = True) -> typing.List[History]:
         histories = History.getAll(use_username=use_username)
         results = []
         for raw_history in raw_histories:

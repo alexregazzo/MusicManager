@@ -29,7 +29,8 @@ AUTHENTICATION_LIST = []
 
 def create_spotify_auth_process(use_username: str, use_state: str, fromapp: bool = False) -> None:
     global AUTHENTICATION_LIST
-    new_auth_user_process = {"use_username": use_username, "use_state": use_state, "time": utils.get_current_timestamp(), "fromapp": fromapp}
+    new_auth_user_process = {"use_username": use_username, "use_state": use_state,
+                             "time": utils.get_current_timestamp(), "fromapp": fromapp}
     logger.debug(F"Adding auth process: {new_auth_user_process}")
     AUTHENTICATION_LIST.append(new_auth_user_process)
 
@@ -38,7 +39,8 @@ def exist_spotify_auth_process(use_username: str, use_state: str) -> tuple:
     global AUTHENTICATION_LIST
     logger.debug(F"Looking for: {use_username} --> {use_state}")
     for auth_process in AUTHENTICATION_LIST[:]:
-        if utils.get_current_timestamp() - auth_process["time"] > datetime.timedelta(seconds=settings.SPOTIFY_AUTH_TIMESPAN):
+        if utils.get_current_timestamp() - auth_process["time"] > datetime.timedelta(
+                seconds=settings.SPOTIFY_AUTH_TIMESPAN):
             logger.debug(F"Expired: {auth_process}")
             AUTHENTICATION_LIST.remove(auth_process)
             continue
@@ -103,7 +105,8 @@ def page_login():
             return render_template("login.html", error_message="Nome de usuário ou senha incorreta.")
         except Exception as e:
             logger.exception(e)
-            return render_template("login.html", error_message="Um erro desconhecido ocorreu, por favor tente novamente mais tarde ou entre em contato.")
+            return render_template("login.html",
+                                   error_message="Um erro desconhecido ocorreu, por favor tente novamente mais tarde ou entre em contato.")
         else:
             use_password, _ = utils.hash_password(use_raw_password, user.use_password_salt)
             logger.debug(user)
@@ -138,10 +141,12 @@ def page_signup():
                     raise database.objects.exceptions.ObjectDoesNotExistError
             except database.objects.exceptions.ObjectDoesNotExistError:
                 try:
-                    user = database.objects.User.create(use_username=use_username, use_email=use_email, use_password_salt=use_password_salt, use_password=use_password)
+                    user = database.objects.User.create(use_username=use_username, use_email=use_email,
+                                                        use_password_salt=use_password_salt, use_password=use_password)
                 except Exception as e:
                     logger.exception(e)
-                    return render_template("signup.html", error_message="Erro ao criar usuário. Tente novamente mais tarde ou entre em contato.")
+                    return render_template("signup.html",
+                                           error_message="Erro ao criar usuário. Tente novamente mais tarde ou entre em contato.")
                 else:
                     g.user = user
                     session["use_username"] = user.use_username
@@ -150,7 +155,8 @@ def page_signup():
                 return render_template("signup.html", error_message="Email já existe!")
         except Exception as e:
             logger.exception(e)
-            return render_template("signup.html", error_message="Um erro desconhecido ocorreu, por favor tente novamente mais tarde ou entre em contato.")
+            return render_template("signup.html",
+                                   error_message="Um erro desconhecido ocorreu, por favor tente novamente mais tarde ou entre em contato.")
         else:
             return render_template("signup.html", error_message="Nome de usuário já existe.")
 
@@ -159,10 +165,12 @@ def page_signup():
 @authenticate
 def page_logs():
     history_runs = reversed(
-        database.objects.Run.getAll(use_username=g.user.use_username, run_type=database.objects.Run.TYPE_GET_HISTORY, order_by=[("run_datetime", "DESC")], limit=10))
+        database.objects.Run.getAll(use_username=g.user.use_username, run_type=database.objects.Run.TYPE_GET_HISTORY,
+                                    order_by=[("run_datetime", "DESC")], limit=10))
 
     make_playlist_runs = reversed(
-        database.objects.Run.getAll(use_username=g.user.use_username, run_type=database.objects.Run.TYPE_MAKE_PLAYLIST, order_by=[("run_datetime", "DESC")], limit=10))
+        database.objects.Run.getAll(use_username=g.user.use_username, run_type=database.objects.Run.TYPE_MAKE_PLAYLIST,
+                                    order_by=[("run_datetime", "DESC")], limit=10))
 
     return render_template("logs.html", history_runs=history_runs, make_playlist_runs=make_playlist_runs)
 
@@ -175,7 +183,8 @@ def page_overview():
     except database.objects.exceptions.ObjectDoesNotExistError:
         token = None
 
-    histories = reversed(database.objects.History.getAll(use_username=g.user.use_username, limit=10, order_by=[("his_played_at", "DESC")]))
+    histories = reversed(database.objects.History.getAll(use_username=g.user.use_username, limit=10,
+                                                         order_by=[("his_played_at", "DESC")]))
 
     return render_template("overview.html", **request.args, token=token, user=g.user, histories=histories)
 
@@ -270,7 +279,9 @@ def spotify_authentication_response():
             if req.ok:
                 data = req.json()
                 try:
-                    database.objects.TokenSpotify.createRaw(rawToken=data, use_username=use_username, requested_time_str=requested_time_str, onExistRaiseError=False)
+                    database.objects.TokenSpotify.createRaw(rawToken=data, use_username=use_username,
+                                                            requested_time_str=requested_time_str,
+                                                            onExistRaiseError=False)
                 except Exception as e:
                     logger.exception(e)
                 else:

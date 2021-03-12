@@ -11,6 +11,13 @@ import secrets
 import hashlib
 
 
+def containInListOfDict(search, array: list, dictKey) -> bool:
+    for o in array:
+        if o[dictKey] == search:
+            return True
+    return False
+
+
 def parse_datetime(dt: str) -> datetime.datetime:
     try:
         return datetime.datetime.strptime(dt, settings.DATETIME_STANDARD_FORMAT)
@@ -108,13 +115,13 @@ CURRENT_DIRPATH = os.path.dirname(__file__)
 LOG_ROOT_PATH = None
 
 global_log_file = logging.handlers.RotatingFileHandler(os.path.join(getLogRootPath(), "global.log"),
-                                                       "w" if settings.DEVELOPMENT else "a", maxBytes=5e6,
+                                                       "w" if settings.DEVELOPMENT else "a", maxBytes=int(5e6),
                                                        backupCount=5, encoding="UTF-8")
 global_log_file.setLevel(logging.DEBUG)
 global_log_file.setFormatter(logging.Formatter(settings.LOG_FORMAT))
 
 global_log_info_file = logging.handlers.RotatingFileHandler(os.path.join(getLogRootPath(), "global_info.log"),
-                                                            "w" if settings.DEVELOPMENT else "a", maxBytes=2e6,
+                                                            "w" if settings.DEVELOPMENT else "a", maxBytes=int(2e6),
                                                             backupCount=5, encoding="UTF-8")
 global_log_info_file.setLevel(logging.INFO)
 global_log_info_file.setFormatter(logging.Formatter(settings.LOG_FORMAT))

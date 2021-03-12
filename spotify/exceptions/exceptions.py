@@ -4,3 +4,7 @@ class SpotifyError(Exception):
 
 class RequestError(SpotifyError):
     pass
+
+
+class RevokeRefreshTokenError(SpotifyError):
+    pass

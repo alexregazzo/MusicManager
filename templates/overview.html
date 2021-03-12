@@ -53,7 +53,8 @@
     </section>
     <section>
         <a href="{{ '#' if token else url_for('spotify_authentication_acquire') }}">
-            <i class="fab fa-spotify spotify-icon {{ 'set' if token else 'not-set' }}" title="{{ 'Vinculado' if token else 'Não vinculado, clique para vincular' }}"></i>
+            <i class="fab fa-spotify spotify-icon {{ 'set' if token else 'not-set' }}"
+               title="{{ 'Vinculado' if token else 'Não vinculado, clique para vincular' }}"></i>
         </a>
     </section>
     <section class="execucoes">

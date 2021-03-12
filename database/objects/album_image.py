@@ -42,7 +42,8 @@ class Album_Image(Base):
         return cls.get(albima_url=albima_url)
 
     @classmethod
-    def createMultipleRaw(cls, alb_id: str, rawImages: typing.List[spotify.hints.Image], onExistRaiseError: bool = True) -> typing.List[Album_Image]:
+    def createMultipleRaw(cls, alb_id: str, rawImages: typing.List[spotify.hints.Image],
+                          onExistRaiseError: bool = True) -> typing.List[Album_Image]:
         return [cls.create(alb_id=alb_id,
                            albima_url=rawImage["url"],
                            albima_width=rawImage["width"],

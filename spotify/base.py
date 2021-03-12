@@ -20,6 +20,8 @@ class SpotifyBase:
 
         if not response.ok:
             logger.warning(f"Problem ocurred during request to spotify {response.status_code} {data}")
+            if data['error'] == 'invalid_grant' and data['error_description'] == 'Refresh token revoked':
+                raise spotify.exceptions.RevokeRefreshTokenError(data)
             if data["error"]["message"] == "Permissions missing":
                 logger.debug("Not allowed")
             raise spotify.exceptions.RequestError(data)

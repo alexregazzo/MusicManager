@@ -51,12 +51,20 @@ class Album(Base):
             results = Album_Image.getAll(alb_id=self.alb_id)
         return results
 
-    def json(self) -> dict:
-        return {"alb_id": self.alb_id,
-                "alb_href": self.alb_href,
-                "alb_name": self.alb_name,
-                "alb_uri": self.alb_uri,
-                "images": self.images}
+    def json(self, *args) -> dict:
+        addons = {
+            "album_images": lambda: {"images": self.images},
+        }
+
+        jsonobj = {"alb_id": self.alb_id,
+                   "alb_href": self.alb_href,
+                   "alb_name": self.alb_name,
+                   "alb_uri": self.alb_uri,
+                   "json_arguments": list(addons.keys())}
+        for arg in args:
+            if arg in addons:
+                jsonobj.update(addons[arg]())
+        return jsonobj
 
     @classmethod
     def createRawSimplified(cls, rawAlbum: spotify.hints.SimplifiedAlbum, onExistRaiseError: bool = True) -> Album:
@@ -69,5 +77,6 @@ class Album(Base):
         except ObjectAlreadyExistError:
             if onExistRaiseError:
                 raise
-        Album_Image.createMultipleRaw(alb_id=rawAlbum["id"], rawImages=rawAlbum["images"], onExistRaiseError=onExistRaiseError)
+        Album_Image.createMultipleRaw(alb_id=rawAlbum["id"], rawImages=rawAlbum["images"],
+                                      onExistRaiseError=onExistRaiseError)
         return cls.get(alb_id=rawAlbum["id"])

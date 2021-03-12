@@ -1,4 +1,5 @@
 import database.objects
+import runlogger
 from spotify import SpotifyUser
 import utils
 import typing
@@ -11,13 +12,15 @@ def getEverybodyHistoryFromSpotify() -> None:
         logger.info("Execution start of history collection")
         tokens = database.objects.TokenSpotify.getAll()
         for token in tokens:
-            with database.objects.RunLogger(use_username=token.use_username,
-                                            run_type=database.objects.Run.TYPE_GET_HISTORY,
-                                            suppress_errors=True):
+            with runlogger.RunLogger(use_username=token.use_username,
+                                     run_type=database.objects.Run.TYPE_GET_HISTORY,
+                                     suppress_errors=True):
                 su = SpotifyUser(token=token)
                 raw_histories = su.getCurrentUserRecentlyPlayedTracks()
                 if raw_histories is not None:
-                    database.objects.History.createMultipleRaw(use_username=token.use_username, raw_histories=raw_histories["items"], onExistRaiseError=False)
+                    database.objects.History.createMultipleRaw(use_username=token.use_username,
+                                                               raw_histories=raw_histories["items"],
+                                                               onExistRaiseError=False)
         logger.info("Execution end of history collection")
     except Exception as e:
         logger.exception(e)

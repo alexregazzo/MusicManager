@@ -33,6 +33,7 @@ class Database:
     def insert(self, sql: str, ignore_errors: typing.List[str] = None, ignore_errors_contain: typing.List[str] = None,
                **kwargs) -> int:
         try:
+            print(sql, kwargs)
             self.cursor.execute(sql, kwargs)
             return self.cursor.lastrowid
         except Exception as e:
@@ -47,6 +48,7 @@ class Database:
 
     def select(self, sql: str, **kwargs) -> list:
         try:
+            print(sql, kwargs)
             self.cursor.execute(sql, kwargs)
             return self.cursor.fetchall()
         except Exception as e:
@@ -54,13 +56,14 @@ class Database:
 
     def update(self, sql: str, **kwargs) -> None:
         try:
-            print(sql)
+            print(sql, kwargs)
             self.cursor.execute(sql, kwargs)
         except Exception as e:
             raise
 
     def delete(self, sql: str, **kwargs) -> None:
         try:
+            print(sql, kwargs)
             self.cursor.execute(sql, kwargs)
         except Exception as e:
             raise
