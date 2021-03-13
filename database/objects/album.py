@@ -1,11 +1,13 @@
 from __future__ import annotations
-from .base import Base
-from .exceptions import *
-from .album_image import Album_Image
-from spotify import SpotifyClient
+
+import typing
+
 import spotify.hints
 import utils
-import typing
+from spotify import SpotifyClient
+from .album_image import Album_Image
+from .base import Base
+from .exceptions import *
 
 logger = utils.get_logger(__file__)
 

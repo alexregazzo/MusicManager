@@ -1,6 +1,7 @@
 from __future__ import annotations
-from .base import Base
+
 import utils
+from .base import Base
 
 
 class TokenApp(Base):

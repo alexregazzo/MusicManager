@@ -1,9 +1,11 @@
 from __future__ import annotations
-import database.objects
-import utils
-import traceback
+
 import json
+import traceback
+
+import database.objects
 import spotify.exceptions
+import utils
 
 logger = utils.get_logger(__file__)
 

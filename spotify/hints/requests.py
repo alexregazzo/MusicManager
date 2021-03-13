@@ -1,5 +1,7 @@
 from __future__ import annotations
+
 import typing
+
 from .objects import Track, Album, Cursor, PlayHistory, SimplifiedPlaylist
 
 

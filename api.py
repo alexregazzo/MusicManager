@@ -1,12 +1,14 @@
-from flask import Blueprint, redirect, request, session, url_for, g, Response
+import json
 from functools import wraps
+
+from flask import Blueprint, redirect, request, session, url_for, g, Response
+
+import data_statistics
 import database.objects
 import database.objects.exceptions
-import utils
 import settings
-import json
-import data_statistics
 import track_scorer
+import utils
 
 apiv1 = Blueprint('apiv1', __name__, template_folder=settings.TEMPLATES_FOLDER_PATH,
                   static_folder=settings.STATIC_FOLDER_PATH)

@@ -1,10 +1,12 @@
 from __future__ import annotations
-from database import Database
-import database
-from .exceptions import *
-import typing
-import utils
+
 import sqlite3
+import typing
+
+import database
+import utils
+from database import Database
+from .exceptions import *
 
 T = typing.TypeVar('T', bound='Base')
 logger = utils.get_logger(__file__)

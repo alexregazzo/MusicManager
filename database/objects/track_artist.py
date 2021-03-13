@@ -1,8 +1,10 @@
 from __future__ import annotations
+
+import typing
+
+import utils
 from .base import Base
 from .exceptions import *
-import typing
-import utils
 
 logger = utils.get_logger(__file__)
 

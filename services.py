@@ -1,8 +1,9 @@
+import typing
+
 import database.objects
 import runlogger
-from spotify import SpotifyUser
 import utils
-import typing
+from spotify import SpotifyUser
 
 logger = utils.get_logger(__file__)
 

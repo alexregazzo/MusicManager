@@ -120,6 +120,16 @@ CREATE TABLE IF NOT EXISTS `profile`
 );
 
 
+CREATE TABLE IF NOT EXISTS `notification`
+(
+    not_id       INTEGER NOT NULL PRIMARY KEY,
+    use_username TEXT    NOT NULL,
+    not_type     TEXT    NOT NULL,
+    not_done     INTEGER NOT NULL,
+    not_message  TEXT    NOT NULL,
+    not_datetime TEXT    NOT NULL,
+    FOREIGN KEY (use_username) REFERENCES `user` (use_username)
+);
 
 
 

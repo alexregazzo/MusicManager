@@ -1,14 +1,17 @@
 from __future__ import annotations
-import os
-import requests
+
 import datetime
-import settings
+import hashlib
 import logging
 import logging.handlers
+import os
+import secrets
 import sys
 import typing
-import secrets
-import hashlib
+
+import requests
+
+import settings
 
 
 def containInListOfDict(search, array: list, dictKey) -> bool:
@@ -101,7 +104,7 @@ def getLogRootPath() -> str:
     global LOG_ROOT_PATH
     if LOG_ROOT_PATH is None:
         index = 0
-        path = os.path.join(settings.LOG_DIRPATH, "Run {index}")
+        path = os.path.join(settings.LOG_DIRPATH, "Run {index:03}")
         while os.path.exists(path.format(index=index)):
             index += 1
         path = path.format(index=index)

@@ -1,9 +1,11 @@
 from __future__ import annotations
+
+import typing
+
+import spotify.hints
+import utils
 from database.objects.base import Base
 from database.objects.exceptions import *
-import spotify.hints
-import typing
-import utils
 
 logger = utils.get_logger(__file__)
 
@@ -39,7 +41,7 @@ class Artist(Base):
 
     @classmethod
     def createMultipleRaw(cls, *, raw_artists=typing.List[spotify.hints.Artist], onExistRaiseError: bool = True) -> \
-    typing.List[Artist]:
+            typing.List[Artist]:
         results = []
         for raw_artist in raw_artists:
             try:

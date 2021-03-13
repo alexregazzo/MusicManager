@@ -1,9 +1,11 @@
 from __future__ import annotations
-import database.objects
+
 import datetime
-import utils
 import typing
+
 import database
+import database.objects
+import utils
 
 
 class ScoredTrack(typing.TypedDict):
@@ -86,7 +88,7 @@ def score_based_on_multiple_day_reproductions(use_username: str, timezone_offset
         current_day_offset_results[result["tra_id"]] = current_day_offset_results.get(result["tra_id"], 0) + 1
         each_day_results[current_day_offset] = current_day_offset_results
 
-    scored = dict()
+    scored = {}
     for day_offset, day_offset_results in each_day_results.items():
         for tra_id, reproductions in day_offset_results.items():
             scored[tra_id] = scored.get(tra_id, 0) + (reproductions - 1) * weight
@@ -124,6 +126,4 @@ def wrap_all_scores(use_username: str, timezone_offset: int, limit: int = None) 
 
 
 if __name__ == "__main__":
-    import json
-
     print(wrap_all_scores("alex", 180))

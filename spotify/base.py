@@ -1,7 +1,9 @@
 from __future__ import annotations
+
 import requests
-import utils
+
 import spotify.exceptions
+import utils
 
 logger = utils.get_logger(__file__)
 

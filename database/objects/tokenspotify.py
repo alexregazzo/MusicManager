@@ -1,9 +1,11 @@
 from __future__ import annotations
+
+import datetime
+
+import spotify.hints
+import utils
 from .base import Base
 from .exceptions import *
-import utils
-import datetime
-import spotify.hints
 
 
 class TokenSpotify(Base):

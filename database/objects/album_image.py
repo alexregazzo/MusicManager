@@ -1,8 +1,10 @@
 from __future__ import annotations
-from .base import Base
-import utils
+
 import typing
+
 import spotify.hints
+import utils
+from .base import Base
 from .exceptions import *
 
 logger = utils.get_logger(__file__)

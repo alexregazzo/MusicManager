@@ -1,7 +1,8 @@
 from __future__ import annotations
+
+import utils
 from .base import Base
 from .exceptions import *
-import utils
 
 logger = utils.get_logger(__file__)
 

@@ -1,5 +1,6 @@
-import settings
 import json
+
+import settings
 
 with open(settings.CONFIGS_PATH, 'r') as f:
     CONFIGS = json.load(f)

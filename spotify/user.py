@@ -1,10 +1,12 @@
 from __future__ import annotations
+
+import json
+import typing
+
 import database.objects
 import spotify
 import spotify.hints
-import typing
 import utils
-import json
 from .base import SpotifyBase
 
 logger = utils.get_logger(__file__)

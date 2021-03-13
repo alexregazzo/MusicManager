@@ -1,6 +1,6 @@
-import threading
-import sqlite3
 import os
+import sqlite3
+import threading
 import typing
 
 CURRENT_DIRPATH = os.path.dirname(__file__)

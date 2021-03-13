@@ -1,13 +1,15 @@
 from __future__ import annotations
+
+import typing
+
+import spotify.hints
+import utils
+from artist import Artist
+from spotify.client import SpotifyClient
+from .album import Album
 from .base import Base
 from .exceptions import *
-import spotify.hints
-from artist import Artist
 from .track_artist import Track_Artist
-from .album import Album
-import utils
-import typing
-from spotify.client import SpotifyClient
 
 logger = utils.get_logger(__file__)
 

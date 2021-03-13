@@ -1,8 +1,10 @@
 from __future__ import annotations
-import database.objects
+
 import datetime
-import utils
 import typing
+
+import database.objects
+import utils
 
 
 def hourlyStats(tokenapp: database.objects.TokenApp, timezoneOffsetMinutes: int) -> typing.List[float]:

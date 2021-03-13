@@ -1,18 +1,20 @@
-from flask import Flask, redirect, request, session, url_for, render_template, g
-from functools import wraps
-import requests
-import database.objects
-import database.objects.exceptions
-import spotify.utils
-import utils
-import settings
+import atexit
 import datetime
 import random
-import atexit
-import services
-from exceptions import *
+from functools import wraps
+
+import requests
 from apscheduler.schedulers.background import BackgroundScheduler
+from flask import Flask, redirect, request, session, url_for, render_template, g
+
 import api
+import database.objects
+import database.objects.exceptions
+import services
+import settings
+import spotify.utils
+import utils
+from exceptions import *
 
 scheduler = BackgroundScheduler()
 scheduler.add_job(func=services.startServices, trigger="interval", seconds=60)
