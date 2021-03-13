@@ -115,7 +115,7 @@ def getLogRootPath() -> str:
 
 
 def getMessages() -> dict:
-    with open("messages.json", "r", encoding='utf8') as f:
+    with open(os.path.join(CURRENT_DIRPATH, "messages.json"), "r", encoding='utf8') as f:
         return json.load(f)
 
 
