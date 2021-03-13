@@ -7,6 +7,7 @@ import runlogger
 import settings
 import track_scorer
 import utils
+import datetime
 from spotify import SpotifyUser
 
 logger = utils.get_logger(__file__)
@@ -69,8 +70,8 @@ def make_everybody_playlists() -> None:
                 su.changePlaylistDetails(playlist_id=playlist.pla_spotify_id,
                                          description=utils.getMultipleFromDict(messages,
                                                                                ["spotify", "playlists",
-                                                                                "scored_tracks"]) + " Ultima atualização em: " + utils.get_current_timestamp().strftime(
-                                             settings.DATETIME_STANDARD_SHOW_FORMAT))
+                                                                                "scored_tracks"]) + " Ultima atualização em: " + (utils.get_current_timestamp() - datetime.timedelta(hours=3)).strftime(
+                                             settings.DATETIME_STANDARD_SHOW_FORMAT) + " GMT-3")
         logger.info("Execution end of making playlists")
     except Exception as e:
         logger.exception(e)
