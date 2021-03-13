@@ -30,15 +30,7 @@ CREATE TABLE IF NOT EXISTS `tokenapp`
     FOREIGN KEY (use_username) REFERENCES `user` (use_username)
 );
 
-CREATE TABLE IF NOT EXISTS `playlist`
-(
-    pla_id         INTEGER NOT NULL PRIMARY KEY,
-    use_username   TEXT    NOT NULL,
-    pro_name       INTEGER NOT NULL,
-    pla_spotify_id TEXT    NULL,
-    FOREIGN KEY (use_username) REFERENCES `user` (use_username),
-    FOREIGN KEY (pro_name) REFERENCES `profile` (pro_name)
-);
+
 
 CREATE TABLE IF NOT EXISTS `run`
 (
@@ -111,12 +103,13 @@ CREATE TABLE IF NOT EXISTS `history`
     FOREIGN KEY (use_username) REFERENCES `user` (use_username)
 );
 
-CREATE TABLE IF NOT EXISTS `profile`
+CREATE TABLE IF NOT EXISTS `playlist`
 (
-    pro_name              TEXT  NOT NULL PRIMARY KEY,
-    pro_gain_integral     FLOAT NOT NULL,
-    pro_gain_derivative   FLOAT NOT NULL,
-    pro_gain_proporcional FLOAT NOT NULL
+    pla_id         INTEGER NOT NULL PRIMARY KEY,
+    use_username   TEXT    NOT NULL,
+    pla_type       TEXT    NOT NULL,
+    pla_spotify_id TEXT    NULL,
+    FOREIGN KEY (use_username) REFERENCES `user` (use_username)
 );
 
 

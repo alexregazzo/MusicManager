@@ -22,3 +22,15 @@ class WrongPasswordError(KnownWebAppError):
 class UsernameAlreadyExistsError(KnownWebAppError):
     def __init__(self):
         super().__init__("Esse nome de usuário já existe!")
+
+
+# ---------------------------------------------------------------------------------------------------- #
+
+
+class KnownServiceError(KnownError):
+    pass
+
+
+class CouldNotMakePlaylistError(KnownServiceError):
+    def __init__(self):
+        super().__init__("Esse nome de usuário já existe!")

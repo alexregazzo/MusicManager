@@ -96,7 +96,7 @@ def score_based_on_multiple_day_reproductions(use_username: str, timezone_offset
     return scored
 
 
-def wrap_all_scores(use_username: str, timezone_offset: int, limit: int = None) -> typing.List[ScoredTrack]:
+def wrap_all_scores(use_username: str, timezone_offset: int = 180, limit: int = None) -> typing.List[ScoredTrack]:
     scored_on_played_amount = score_based_on_played_amount(use_username=use_username)
     scored_on_played_amount_since_last_week = score_based_on_played_amount_since_last_week(use_username=use_username)
     scored_on_day_continuity = score_based_on_day_continuity(use_username=use_username, timezone_offset=timezone_offset)

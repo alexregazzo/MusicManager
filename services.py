@@ -1,7 +1,11 @@
 import typing
 
 import database.objects
+import database.objects.exceptions
+import exceptions
 import runlogger
+import settings
+import track_scorer
 import utils
 from spotify import SpotifyUser
 
@@ -32,33 +36,51 @@ def make_playlist_order_from_history(histories: typing.List[database.objects.His
 
 
 def make_everybody_playlists() -> None:
-    return
-    # try:
-    #     logger.info("Execution start of making playlists")
-    #     tokens = database.objects.TokenSpotify.get_all()
-    #
-    #     for token in tokens:
-    #         with database.objects.RunLogger(use_username=token.use_username,
-    #                                         run_type=database.objects.Run.RUN_TYPE_MAKE_PLAYLIST,
-    #                                         suppress_errors=True):
-    #             su = SpotifyUser(token=token)
-    #             # if token.tok_playlist_id is None:
-    #             #     playlist_raw = su.create_playlist(playlist_name="MusicManager")
-    #             #     token.update(tok_playlist_id=playlist_raw["id"])
-    #             #
-    #             # if not su.replace_user_playlist_tracks(token.tok_playlist_id,
-    #             #                                        uris=make_playlist_order_from_history(database.objects.History.get_all(use_username=token.use_username))):
-    #             #     raise Exception("Unknown error while making the playlist")
-    #     logger.info("Execution end of making playlists")
-    # except Exception as e:
-    #     logger.exception(e)
+    messages = utils.getMessages()
+    try:
+        logger.info("Execution start of making playlists")
+
+        tokens = database.objects.TokenSpotify.getAll()
+        for token in tokens:
+            with runlogger.RunLogger(use_username=token.use_username,
+                                     run_type=database.objects.Run.TYPE_MAKE_PLAYLIST,
+                                     suppress_errors=True):
+
+                # Make sure everyone has a playlist of scored tracks
+                try:
+                    playlist = database.objects.Playlist.get(use_username=token.use_username)
+                except database.objects.exceptions.ObjectDoesNotExistError:
+                    playlist = database.objects.Playlist.create(use_username=token.use_username,
+                                                                pla_type=database.objects.Playlist.TYPE_SCORED_TRACKS)
+
+                su = SpotifyUser(token=token)
+                # Create playlist if not exists
+                if playlist.pla_spotify_id is None:
+                    playlist_response = su.createPlaylist(playlist_name="MM Scored Tracks",
+                                                          description=utils.getMultipleFromDict(messages,
+                                                                                                ["spotify", "playlists",
+                                                                                                 "scored_tracks"]) + " Atualização em breve...")
+                    playlist.update(pla_spotify_id=playlist_response["id"])
+
+                scored_tracks = track_scorer.wrap_all_scores(token.use_username)
+                if not su.reorderOrReplacePlaylistItems(playlist.pla_spotify_id,
+                                                        uris=list(map(lambda x: x["track"].tra_uri, scored_tracks[:50]))):
+                    raise exceptions.CouldNotMakePlaylistError()
+                su.changePlaylistDetails(playlist_id=playlist.pla_spotify_id,
+                                         description=utils.getMultipleFromDict(messages,
+                                                                               ["spotify", "playlists",
+                                                                                "scored_tracks"]) + " Ultima atualização em: " + utils.get_current_timestamp().strftime(
+                                             settings.DATETIME_STANDARD_SHOW_FORMAT))
+        logger.info("Execution end of making playlists")
+    except Exception as e:
+        logger.exception(e)
 
 
 def startServices():
     getEverybodyHistoryFromSpotify()
-    # make_everybody_playlists()
+    make_everybody_playlists()
 
 
 if __name__ == "__main__":
-    getEverybodyHistoryFromSpotify()
+    # getEverybodyHistoryFromSpotify()
     make_everybody_playlists()
