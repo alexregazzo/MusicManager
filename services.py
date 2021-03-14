@@ -1,3 +1,4 @@
+import datetime
 import typing
 
 import database.objects
@@ -7,7 +8,6 @@ import runlogger
 import settings
 import track_scorer
 import utils
-import datetime
 from spotify import SpotifyUser
 
 logger = utils.get_logger(__file__)
@@ -37,8 +37,9 @@ def make_playlist_order_from_history(histories: typing.List[database.objects.His
 
 
 def make_everybody_playlists() -> None:
-    messages = utils.getMessages()
     try:
+        messages = utils.getMessages()
+        scoredPlaylistMessage = utils.getMultipleFromDict(messages, ["spotify", "playlists", "scored_tracks"])
         logger.info("Execution start of making playlists")
 
         tokens = database.objects.TokenSpotify.getAll()
@@ -58,9 +59,7 @@ def make_everybody_playlists() -> None:
                 # Create playlist if not exists
                 if playlist.pla_spotify_id is None:
                     playlist_response = su.createPlaylist(playlist_name="MM Scored Tracks",
-                                                          description=utils.getMultipleFromDict(messages,
-                                                                                                ["spotify", "playlists",
-                                                                                                 "scored_tracks"]) + " Atualização em breve...")
+                                                          description=scoredPlaylistMessage + " Atualização em breve...")
                     playlist.update(pla_spotify_id=playlist_response["id"])
 
                 scored_tracks = track_scorer.wrap_all_scores(token.use_username)
@@ -68,9 +67,8 @@ def make_everybody_playlists() -> None:
                                                         uris=list(map(lambda x: x["track"].tra_uri, scored_tracks[:50]))):
                     raise exceptions.CouldNotMakePlaylistError()
                 su.changePlaylistDetails(playlist_id=playlist.pla_spotify_id,
-                                         description=utils.getMultipleFromDict(messages,
-                                                                               ["spotify", "playlists",
-                                                                                "scored_tracks"]) + " Ultima atualização em: " + (utils.get_current_timestamp() - datetime.timedelta(hours=3)).strftime(
+                                         description=scoredPlaylistMessage + " Ultima atualização em: " + (
+                                                     utils.get_current_timestamp() - datetime.timedelta(hours=3)).strftime(
                                              settings.DATETIME_STANDARD_SHOW_FORMAT) + " GMT-3")
         logger.info("Execution end of making playlists")
     except Exception as e:

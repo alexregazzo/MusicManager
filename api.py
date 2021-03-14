@@ -248,6 +248,7 @@ def api_v1_scores_get(tokenapp: database.objects.TokenApp):
             return makeAPIResponse(error_message="Formato do 'timezone_offset_minutes' incorreto deve ser int")
 
     return makeAPIResponse(
-        data=track_scorer.wrap_all_scores(use_username=tokenapp.use_username, timezone_offset=timezone_offset_minutes,
+        data=track_scorer.wrap_all_scores(use_username=tokenapp.use_username,
+                                          timezone_offset=timezone_offset_minutes,
                                           limit=limit),
         include_in_json=include_in_json)
