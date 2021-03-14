@@ -1,13 +1,13 @@
 import datetime
 import typing
 
+import dataManager.scorer
 import database.objects
 import database.objects.exceptions
-import exceptions
 import runlogger
 import settings
-import track_scorer
 import utils
+from exceptions.serviceException import *
 from spotify import SpotifyUser
 
 logger = utils.get_logger(__file__)
@@ -62,13 +62,13 @@ def make_everybody_playlists() -> None:
                                                           description=scoredPlaylistMessage + " Atualização em breve...")
                     playlist.update(pla_spotify_id=playlist_response["id"])
 
-                scored_tracks = track_scorer.wrap_all_scores(token.use_username)
+                scored_tracks = dataManager.scorer.wrap_all_scores(token.use_username)
                 if not su.reorderOrReplacePlaylistItems(playlist.pla_spotify_id,
                                                         uris=list(map(lambda x: x["track"].tra_uri, scored_tracks[:50]))):
-                    raise exceptions.CouldNotMakePlaylistError()
+                    raise CouldNotMakePlaylistError()
                 su.changePlaylistDetails(playlist_id=playlist.pla_spotify_id,
                                          description=scoredPlaylistMessage + " Ultima atualização em: " + (
-                                                     utils.get_current_timestamp() - datetime.timedelta(hours=3)).strftime(
+                                                 utils.get_current_timestamp() - datetime.timedelta(hours=3)).strftime(
                                              settings.DATETIME_STANDARD_SHOW_FORMAT) + " GMT-3")
         logger.info("Execution end of making playlists")
     except Exception as e:

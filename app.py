@@ -14,7 +14,7 @@ import services
 import settings
 import spotify.utils
 import utils
-from exceptions import *
+from exceptions.webAppException import *
 
 scheduler = BackgroundScheduler()
 scheduler.add_job(func=services.startServices, trigger="interval", seconds=60)

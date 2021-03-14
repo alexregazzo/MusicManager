@@ -5,6 +5,7 @@ from .base import Base
 
 class Playlist(Base):
     TYPE_SCORED_TRACKS = "scored_tracks"
+
     def __init__(self, *,
                  pla_id: int,
                  use_username: str,

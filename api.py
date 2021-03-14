@@ -3,11 +3,11 @@ from functools import wraps
 
 from flask import Blueprint, redirect, request, session, url_for, g, Response
 
-import data_statistics
+import dataManager.scorer
+import dataManager.statistics
 import database.objects
 import database.objects.exceptions
 import settings
-import track_scorer
 import utils
 
 apiv1 = Blueprint('apiv1', __name__, template_folder=settings.TEMPLATES_FOLDER_PATH,
@@ -216,9 +216,9 @@ def api_v1_stats_get(tokenapp: database.objects.TokenApp):
     if not queries:
         return makeAPIResponse(error_message="Argumento 'q' não informado")
     if "weekdays" in queries:
-        response["weekdays"] = data_statistics.weekdayStats(tokenapp, timezone_offset_minutes)
+        response["weekdays"] = dataManager.statistics.weekdayStats(tokenapp, timezone_offset_minutes)
     if "hourly" in queries:
-        response["hourly"] = data_statistics.hourlyStats(tokenapp, timezone_offset_minutes)
+        response["hourly"] = dataManager.statistics.hourlyStats(tokenapp, timezone_offset_minutes)
 
     return makeAPIResponse(data=response, include_in_json=include_in_json)
 
@@ -248,7 +248,7 @@ def api_v1_scores_get(tokenapp: database.objects.TokenApp):
             return makeAPIResponse(error_message="Formato do 'timezone_offset_minutes' incorreto deve ser int")
 
     return makeAPIResponse(
-        data=track_scorer.wrap_all_scores(use_username=tokenapp.use_username,
-                                          timezone_offset=timezone_offset_minutes,
-                                          limit=limit),
+        data=dataManager.scorer.wrap_all_scores(use_username=tokenapp.use_username,
+                                                timezone_offset=timezone_offset_minutes,
+                                                limit=limit),
         include_in_json=include_in_json)
