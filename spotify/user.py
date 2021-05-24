@@ -68,6 +68,9 @@ class SpotifyUser(SpotifyBase):
         return self.request(spotify.GET_PLAYLIST_ENDPOINT[0],
                             spotify.GET_PLAYLIST_ENDPOINT[1].format(playlist_id=playlist_id))
 
+    def getSavedTracks(self):
+        return self.request(spotify.GET_USER_SAVED_TRACKS_ENDPOINT[0], spotify.GET_USER_SAVED_TRACKS_ENDPOINT[1], params={"limit": 50})
+
     def changePlaylistDetails(self, playlist_id: str, name: str = None, public: bool = None, collaborative: bool = None,
                               description: str = None) -> bool:
         data = {}

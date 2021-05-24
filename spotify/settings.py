@@ -22,6 +22,7 @@ CHECK_IF_USERS_FOLLOW_PLAYLIST_ENDPOINT = "GET", "https://api.spotify.com/v1/pla
 REORDER_OR_REPLACE_PLAYLIST_ITEMS_ENDPOINT = "PUT", "https://api.spotify.com/v1/playlists/{playlist_id}/tracks"
 CHANGE_DETAILS_ENDPOINT = "PUT", "https://api.spotify.com/v1/playlists/{playlist_id}"
 GET_PLAYLIST_ENDPOINT = "GET", "https://api.spotify.com/v1/playlists/{playlist_id}"
+GET_USER_SAVED_TRACKS_ENDPOINT = "GET", "https://api.spotify.com/v1/me/tracks"
 GET_CURRENT_USER_PLAYLISTS = "GET", "https://api.spotify.com/v1/me/playlists"
 GET_ALBUM_ENDPOINT = "GET", "https://api.spotify.com/v1/albums/{id}"
 GET_TRACK_ENDPOINT = "GET", "https://api.spotify.com/v1/tracks/{id}"
