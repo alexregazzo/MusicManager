@@ -94,6 +94,16 @@ class SpotifyUser(SpotifyBase):
             params={"uris": ",".join(uris[i:i + 100])},
             ignore_text_response=True) for i in range(0, len(uris), 100)])
 
+    def addToPlaylist(self, playlist_id: str, uris: typing.List[str], position: int = None) -> bool:
+        extraParams = {}
+        if position is not None:
+            extraParams["position"] = position
+        return all([self.request(
+            spotify.ADD_TO_PLAYLIST_ENDPOINT[0],
+            spotify.ADD_TO_PLAYLIST_ENDPOINT[1].format(playlist_id=playlist_id),
+            params={"uris": ",".join(uris[i:i + 50]), **extraParams},
+            ignore_text_response=True) for i in range(0, len(uris), 50)])
+
     def checkIfUsersFollowPlaylist(self, playlist_id: str, users: typing.List[str]) -> typing.List[bool]:
         results = []
         for i in range(0, len(users), 5):
