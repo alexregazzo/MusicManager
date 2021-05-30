@@ -30,8 +30,6 @@ CREATE TABLE IF NOT EXISTS `tokenapp`
     FOREIGN KEY (use_username) REFERENCES `user` (use_username)
 );
 
-
-
 CREATE TABLE IF NOT EXISTS `run`
 (
     run_id         INTEGER NOT NULL PRIMARY KEY,
@@ -83,7 +81,6 @@ CREATE TABLE IF NOT EXISTS `album_image`
     FOREIGN KEY (alb_id) REFERENCES `album` (alb_id)
 );
 
-
 CREATE TABLE IF NOT EXISTS `track_artist`
 (
     traart_id INTEGER NOT NULL PRIMARY KEY,
@@ -108,21 +105,31 @@ CREATE TABLE IF NOT EXISTS `playlist`
     pla_id         INTEGER NOT NULL PRIMARY KEY,
     use_username   TEXT    NOT NULL,
     pla_type       TEXT    NOT NULL,
+    pro_id         INTEGER NULL,
     pla_spotify_id TEXT    NULL,
     FOREIGN KEY (use_username) REFERENCES `user` (use_username)
 );
 
-
-CREATE TABLE IF NOT EXISTS `notification`
+CREATE TABLE IF NOT EXISTS `profile`
 (
-    not_id       INTEGER NOT NULL PRIMARY KEY,
-    use_username TEXT    NOT NULL,
-    not_type     TEXT    NOT NULL,
-    not_done     INTEGER NOT NULL,
-    not_message  TEXT    NOT NULL,
-    not_datetime TEXT    NOT NULL,
-    FOREIGN KEY (use_username) REFERENCES `user` (use_username)
+    pro_id  INTEGER NOT NULL PRIMARY KEY,
+    pro_ph  FLOAT   NOT NULL,
+    pro_phs FLOAT   NOT NULL,
+    pro_pc  FLOAT   NOT NULL,
+    pro_pm  FLOAT   NOT NULL
 );
+
+-- CREATE TABLE IF NOT EXISTS `notification`
+-- (
+--     not_id       INTEGER NOT NULL PRIMARY KEY,
+--     use_username TEXT    NOT NULL,
+--     not_type     TEXT    NOT NULL,
+--     not_done     INTEGER NOT NULL,
+--     not_message  TEXT    NOT NULL,
+--     not_datetime TEXT    NOT NULL,
+--     FOREIGN KEY (use_username) REFERENCES `user` (use_username)
+-- );
+
 
 
 

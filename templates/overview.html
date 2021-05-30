@@ -31,17 +31,17 @@
 </head>
 <body>
 <header class="menu">
-    <a href="{{ url_for('page_overview') }}">
+    <a href="{{ url_for('web.website.page_overview') }}">
         <i title="Inicio" class="fas fa-home"></i>
     </a>
-    <a href="{{ url_for('page_logs') }}">
+    <a href="{{ url_for('web.website.page_logs') }}">
         <i title="Registros" class="fas fa-sticky-note"></i>
     </a>
     <div class="right-content">
-        <a href="{{ url_for('page_settings') }}">
+        <a href="{{ url_for('web.website.page_settings') }}">
             <i title="Configurações" class="fas fa-cog"></i>
         </a>
-        <a href="{{ url_for('logout') }}">
+        <a href="{{ url_for('web.website.logout') }}">
             <i title="Sair" class="fas fa-sign-out-alt"></i>
         </a>
     </div>
@@ -52,7 +52,7 @@
         <p class="success_message">{{ success_message }}</p>
     </section>
     <section>
-        <a href="{{ '#' if token else url_for('spotify_authentication_acquire') }}">
+        <a href="{{ '#' if token else url_for('web.website.spotify_authentication_acquire') }}">
             <i class="fab fa-spotify spotify-icon {{ 'set' if token else 'not-set' }}"
                title="{{ 'Vinculado' if token else 'Não vinculado, clique para vincular' }}"></i>
         </a>

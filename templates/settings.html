@@ -12,17 +12,17 @@
 </head>
 <body>
 <header class="menu">
-    <a href="{{ url_for('page_overview') }}">
+    <a href="{{ url_for('web.website.page_overview') }}">
         <i title="Inicio" class="fas fa-home"></i>
     </a>
-    <a href="{{ url_for('page_logs') }}">
+    <a href="{{ url_for('web.website.page_logs') }}">
         <i title="Registros" class="fas fa-sticky-note"></i>
     </a>
     <div class="right-content">
-        <a href="{{ url_for('page_settings') }}">
+        <a href="{{ url_for('web.website.page_settings') }}">
             <i title="Configurações" class="fas fa-cog"></i>
         </a>
-        <a href="{{ url_for('logout') }}">
+        <a href="{{ url_for('web.website.logout') }}">
             <i title="Sair" class="fas fa-sign-out-alt"></i>
         </a>
     </div>

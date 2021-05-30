@@ -1,7 +1,7 @@
 import datetime
 import typing
 
-import dataManager.scorer
+import analytics.scorer
 import database.objects
 import database.objects.exceptions
 import runlogger
@@ -38,8 +38,7 @@ def make_playlist_order_from_history(histories: typing.List[database.objects.His
 
 def make_everybody_playlists() -> None:
     try:
-        messages = utils.getMessages()
-        scoredPlaylistMessage = utils.getMultipleFromDict(messages, ["spotify", "playlists", "scored_tracks"])
+        scoredPlaylistMessage = utils.getMultipleFromDict(settings.SPOTIFY_DEFINITIONS, ["playlists", "scored_tracks", "description"])
         logger.info("Execution start of making playlists")
 
         tokens = database.objects.TokenSpotify.getAll()
@@ -49,11 +48,8 @@ def make_everybody_playlists() -> None:
                                      suppress_errors=True):
 
                 # Make sure everyone has a playlist of scored tracks
-                try:
-                    playlist = database.objects.Playlist.get(use_username=token.use_username)
-                except database.objects.exceptions.ObjectDoesNotExistError:
-                    playlist = database.objects.Playlist.create(use_username=token.use_username,
-                                                                pla_type=database.objects.Playlist.TYPE_SCORED_TRACKS)
+                playlist = database.objects.Playlist.getOrCreate(use_username=token.use_username,
+                                                                 pla_type=database.objects.Playlist.TYPE_SCORED_TRACKS)
 
                 su = SpotifyUser(token=token)
                 # Create playlist if not exists
@@ -62,14 +58,19 @@ def make_everybody_playlists() -> None:
                                                           description=scoredPlaylistMessage + " Atualização em breve...")
                     playlist.update(pla_spotify_id=playlist_response["id"])
 
-                scored_tracks = dataManager.scorer.wrap_all_scores(token.use_username)
+                weights = {}
+                if playlist.pro_id is not None:
+                    profile = database.objects.Profile.get(pro_id=playlist.pro_id)
+                    weights = profile.toGenDict()
+                scored_tracks = analytics.scorer.wrap_all_scores(token.use_username, **weights)
                 if not su.reorderOrReplacePlaylistItems(playlist.pla_spotify_id,
                                                         uris=list(map(lambda x: x["track"].tra_uri, scored_tracks[:50]))):
                     raise CouldNotMakePlaylistError()
                 su.changePlaylistDetails(playlist_id=playlist.pla_spotify_id,
                                          description=scoredPlaylistMessage + " Ultima atualização em: " + (
                                                  utils.get_current_timestamp() - datetime.timedelta(hours=3)).strftime(
-                                             settings.DATETIME_STANDARD_SHOW_FORMAT) + " GMT-3")
+                                             settings.DATETIME_STANDARD_SHOW_FORMAT) + " GMT-3 Pesos: " + str(weights))
+
         logger.info("Execution end of making playlists")
     except Exception as e:
         logger.exception(e)

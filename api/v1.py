@@ -1,81 +1,19 @@
-import json
-from functools import wraps
+from flask import Blueprint, redirect, request, session, url_for, g
 
-from flask import Blueprint, redirect, request, session, url_for, g, Response
-
-import dataManager.scorer
-import dataManager.statistics
+import analytics.scorer
+import analytics.statistics
 import database.objects
 import database.objects.exceptions
 import settings
 import utils
+from .general import api_authenticate, makeAPIResponse, api_ensure_response
 
 apiv1 = Blueprint('apiv1', __name__, template_folder=settings.TEMPLATES_FOLDER_PATH,
-                  static_folder=settings.STATIC_FOLDER_PATH)
+                  static_folder=settings.STATIC_FOLDER_PATH, url_prefix="/v1")
 logger = utils.get_logger(__file__)
 
 
-def makeAPIResponse(*, data: any = None, status: int = None, error_message: str = None, user_displayable: bool = False,
-                    include_in_json: list = None):
-    if include_in_json is None:
-        include_in_json = []
-    if status is None:
-        if error_message is None:
-            if data is not None:
-                status = 200
-            else:
-                status = 400
-        else:
-            status = 400
-
-    if status >= 300 and error_message is None:
-        error_message = "Erro desconhecido"
-
-    return Response(json.dumps({
-        "user_displayable": user_displayable,
-        "success": status < 300,
-        "status": status,
-        "data": data,
-        "error_message": error_message}, default=lambda x: x.json(*include_in_json), indent=2, ensure_ascii=False
-    ), status=status, mimetype="application/json")
-
-
-def api_ensure_response(f):
-    @wraps(f)
-    def request_wrapper(*args, **kwargs):
-        try:
-            response = f(*args, **kwargs)
-            if response is not None:
-                return response
-            return makeAPIResponse(error_message="Sem resposta da função", status=500)
-        except Exception as e:
-            print(e)
-            return makeAPIResponse(error_message="Erro interno de servidor", status=500, user_displayable=True)
-
-    return request_wrapper
-
-
-def api_authenticate(f):
-    @api_ensure_response
-    @wraps(f)
-    def api_auth(*args, **kwargs):
-        tokenapp_access_token = request.args.get('token', None)
-        if tokenapp_access_token is None:
-            return makeAPIResponse(error_message="Token não informado", status=401, user_displayable=True)
-        try:
-            tokenapp = database.objects.TokenApp.get(tok_access_token=tokenapp_access_token)
-        except database.objects.exceptions.ObjectDoesNotExistError:
-            return makeAPIResponse(error_message="Token inválido", status=401, user_displayable=True)
-        else:
-            if tokenapp.tok_active:
-                return f(*args, tokenapp=tokenapp, **kwargs)
-            else:
-                return makeAPIResponse(error_message="Acesso negado", status=403, user_displayable=True)
-
-    return api_auth
-
-
-@apiv1.route("/api/v1/history/get")
+@apiv1.route("/history/get")
 @api_authenticate
 def api_v1_history_get(tokenapp: database.objects.TokenApp):
     limit = request.args.get("limit", None)
@@ -92,7 +30,7 @@ def api_v1_history_get(tokenapp: database.objects.TokenApp):
     return makeAPIResponse(data=histories, include_in_json=include_in_json)
 
 
-@apiv1.route("/api/v1/auth/user/signup", methods=["POST"])
+@apiv1.route("/auth/user/signup", methods=["POST"])
 @api_ensure_response
 def api_v1_auth_user_signup():
     try:
@@ -136,7 +74,7 @@ def api_v1_auth_user_signup():
     return makeAPIResponse(error_message="Erro desconhecido", user_displayable=True)
 
 
-@apiv1.route("/api/v1/auth/token/get", methods=["POST"])
+@apiv1.route("/auth/token/get", methods=["POST"])
 @api_ensure_response
 def api_v1_auth_token_get():
     try:
@@ -165,16 +103,16 @@ def api_v1_auth_token_get():
     return makeAPIResponse(error_message="Erro desconhecido", user_displayable=True)
 
 
-@apiv1.route("/api/v1/auth/spotify/token")
+@apiv1.route("/auth/spotify/token")
 @api_authenticate
 def api_v1_auth_spotify_token(tokenapp: database.objects.TokenApp):
     user = database.objects.User.get(use_username=tokenapp.use_username)
     g.user = user
     session["use_username"] = user.use_username
-    return redirect(url_for("spotify_authentication_acquire", fromapp="true"))
+    return redirect(url_for("web.website.spotify_authentication_acquire", fromapp="true"))
 
 
-@apiv1.route("/api/v1/auth/spotify/get/exist")
+@apiv1.route("/auth/spotify/get/exist")
 @api_authenticate
 def api_v1_auth_spotify_get_exist(tokenapp: database.objects.TokenApp):
     try:
@@ -185,7 +123,7 @@ def api_v1_auth_spotify_get_exist(tokenapp: database.objects.TokenApp):
         return makeAPIResponse(data=True)
 
 
-@apiv1.route("/api/v1/auth/spotify/delete")
+@apiv1.route("/auth/spotify/delete")
 @api_authenticate
 def api_v1_auth_spotify_delete(tokenapp: database.objects.TokenApp):
     try:
@@ -197,7 +135,7 @@ def api_v1_auth_spotify_delete(tokenapp: database.objects.TokenApp):
         return makeAPIResponse(status=200)
 
 
-@apiv1.route("/api/v1/stats/get")
+@apiv1.route("/stats/get")
 @api_authenticate
 def api_v1_stats_get(tokenapp: database.objects.TokenApp):
     timezone_offset_minutes = request.args.get("timezone_offset_minutes", None)
@@ -216,14 +154,14 @@ def api_v1_stats_get(tokenapp: database.objects.TokenApp):
     if not queries:
         return makeAPIResponse(error_message="Argumento 'q' não informado")
     if "weekdays" in queries:
-        response["weekdays"] = dataManager.statistics.weekdayStats(tokenapp, timezone_offset_minutes)
+        response["weekdays"] = analytics.statistics.weekdayStats(tokenapp, timezone_offset_minutes)
     if "hourly" in queries:
-        response["hourly"] = dataManager.statistics.hourlyStats(tokenapp, timezone_offset_minutes)
+        response["hourly"] = analytics.statistics.hourlyStats(tokenapp, timezone_offset_minutes)
 
     return makeAPIResponse(data=response, include_in_json=include_in_json)
 
 
-@apiv1.route("/api/v1/scores/get")
+@apiv1.route("/scores/get")
 @api_authenticate
 def api_v1_scores_get(tokenapp: database.objects.TokenApp):
     limit = request.args.get("limit", None)
@@ -234,6 +172,23 @@ def api_v1_scores_get(tokenapp: database.objects.TokenApp):
                 raise ValueError
         except ValueError:
             return makeAPIResponse(error_message="Formato ou valor do 'limit' incorreto")
+
+    try:
+        weights = request.get_json(force=True)
+    except Exception:
+        weights = None
+
+    newWeights = {}
+
+    if weights is not None:
+        keys = ["ph", "phs", "pc", "pm"]
+        for key in keys:
+            if key not in weights:
+                continue
+            if type(weights[key]) is not int and type(weights[key]) is not float:
+                return makeAPIResponse(error_message=F"{key} value is not a number: {weights[key]}")
+
+            newWeights["pro_" + key] = weights[key]
 
     timezone_offset_minutes = request.args.get("timezone_offset_minutes", None)
     if timezone_offset_minutes is None:
@@ -248,7 +203,34 @@ def api_v1_scores_get(tokenapp: database.objects.TokenApp):
             return makeAPIResponse(error_message="Formato do 'timezone_offset_minutes' incorreto deve ser int")
 
     return makeAPIResponse(
-        data=dataManager.scorer.wrap_all_scores(use_username=tokenapp.use_username,
-                                                timezone_offset=timezone_offset_minutes,
-                                                limit=limit),
+        data=analytics.scorer.wrap_all_scores(use_username=tokenapp.use_username,
+                                              timezone_offset=timezone_offset_minutes,
+                                              limit=limit,
+                                              **newWeights),
         include_in_json=include_in_json)
+
+
+@apiv1.route("/playlist/scored/weights/set", methods=["PUT"])
+@api_authenticate
+def api_v1_playlist_scored_weights_set(tokenapp: database.objects.TokenApp):
+    try:
+        weights = request.get_json(force=True)
+    except Exception:
+        return makeAPIResponse(error_message="Fail to decode JSON object")
+    newWeights = {}
+    keys = ["ph", "phs", "pc", "pm"]
+    for key in keys:
+        if key not in weights:
+            return makeAPIResponse(error_message=F"Missing key: {key}")
+        if type(weights[key]) is not int and type(weights[key]) is not float:
+            try:
+                weights[key] = float(weights[key].replace(",", "."))
+            except:
+                return makeAPIResponse(error_message=F"{key} value is not a number: {weights[key]}")
+        newWeights["pro_" + key] = weights[key]
+
+    profile = database.objects.Profile.getOrCreate(**newWeights)
+    playlist = database.objects.Playlist.getOrCreate(use_username=tokenapp.use_username,
+                                                     pla_type=database.objects.Playlist.TYPE_SCORED_TRACKS)
+    playlist.update(pro_id=profile.pro_id)
+    return makeAPIResponse(status=200)

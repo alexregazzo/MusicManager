@@ -1,6 +1,7 @@
 from .album_image import Album_Image
 from .history import History
 from .playlist import Playlist
+from .profile import Profile
 from .run import Run
 from .tokenapp import TokenApp
 from .tokenspotify import TokenSpotify

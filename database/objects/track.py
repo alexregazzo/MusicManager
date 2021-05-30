@@ -4,9 +4,9 @@ import typing
 
 import spotify.hints
 import utils
-from artist import Artist
 from spotify.client import SpotifyClient
 from .album import Album
+from .artist import Artist
 from .base import Base
 from .exceptions import *
 from .track_artist import Track_Artist

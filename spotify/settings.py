@@ -1,13 +1,8 @@
-import json
-
 import settings
 
-with open(settings.CONFIGS_PATH, 'r') as f:
-    CONFIGS = json.load(f)
-
-CLIENT_ID = CONFIGS["spotify"]["client_id"]
-CLIENT_SECRET = CONFIGS["spotify"]["client_secret"]
-SCOPES = " ".join(CONFIGS["spotify"]["scopes"])
+CLIENT_ID = settings.CONFIGS["spotify"]["client_id"]
+CLIENT_SECRET = settings.CONFIGS["spotify"]["client_secret"]
+SCOPES = " ".join(settings.SPOTIFY_DEFINITIONS["scopes"])
 
 GET_MULTIPLE_ALBUMS_ENDPOINT = "GET", "https://api.spotify.com/v1/albums"
 GET_SEVERAL_TRACKS_ENDPOINT = "GET", "https://api.spotify.com/v1/tracks"

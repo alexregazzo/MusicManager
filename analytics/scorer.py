@@ -96,12 +96,13 @@ def score_based_on_multiple_day_reproductions(use_username: str, timezone_offset
     return scored
 
 
-def wrap_all_scores(use_username: str, timezone_offset: int = 180, limit: int = None) -> typing.List[ScoredTrack]:
-    scored_on_played_amount = score_based_on_played_amount(use_username=use_username)
-    scored_on_played_amount_since_last_week = score_based_on_played_amount_since_last_week(use_username=use_username)
-    scored_on_day_continuity = score_based_on_day_continuity(use_username=use_username, timezone_offset=timezone_offset)
+def wrap_all_scores(use_username: str, timezone_offset: int = 180, limit: int = None, ph: float = 1.0, phs: float = 1.0, pc: float = 1.0,
+                    pm: float = 1.0) -> typing.List[ScoredTrack]:
+    scored_on_played_amount = score_based_on_played_amount(use_username=use_username, weight=ph)
+    scored_on_played_amount_since_last_week = score_based_on_played_amount_since_last_week(use_username=use_username, weight=phs)
+    scored_on_day_continuity = score_based_on_day_continuity(use_username=use_username, timezone_offset=timezone_offset, weight=pc)
     scored_on_multiple_reproductions = score_based_on_multiple_day_reproductions(use_username=use_username,
-                                                                                 timezone_offset=timezone_offset)
+                                                                                 timezone_offset=timezone_offset, weight=pm)
     all_track_ids = set(
         list(scored_on_played_amount.keys()) + list(scored_on_played_amount_since_last_week.keys()) + list(
             scored_on_day_continuity.keys()) + list(

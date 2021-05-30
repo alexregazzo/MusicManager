@@ -27,7 +27,7 @@
         <input type="text" name="user_username" id="use_username" required placeholder="Nome*">
         <input type="email" name="user_email" id="use_email" placeholder="Email">
         <input type="password" name="user_password" id="use_password" required placeholder="Senha*">
-        <a href="{{ url_for('page_login') }}">Log In</a>
+        <a href="{{ url_for('web.website.page_login') }}">Log In</a>
     </form>
     <button id="main-btn"
             onclick="if(document.querySelector('form').checkValidity()) document.querySelector('form').submit(); else alert('Formulário incorreto')">

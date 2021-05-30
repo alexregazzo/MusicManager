@@ -1,3 +1,4 @@
+import json
 import os
 import platform
 
@@ -16,7 +17,14 @@ STATIC_FOLDER_PATH = os.path.join(ROOT_DIRPATH, "static")
 
 SPOTIFY_AUTH_TIMESPAN = 600
 
-CONFIGS_PATH = os.path.join(ROOT_DIRPATH, "configs.json")
+CONFIGS_PATH = os.path.join(ROOT_DIRPATH, "keys.json")
+SPOTIFY_PATH = os.path.join(ROOT_DIRPATH, "spotify.json")
 
 os.makedirs(LOG_DIRPATH, exist_ok=True)
 LOG_OUTPUT_TO_CONSOLE = DEVELOPMENT
+
+with open(CONFIGS_PATH, 'r') as f:
+    CONFIGS = json.load(f)
+
+with open(SPOTIFY_PATH, 'r') as f:
+    SPOTIFY_DEFINITIONS = json.load(f)

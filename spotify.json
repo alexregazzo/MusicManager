@@ -1,0 +1,15 @@
+{
+  "playlists": {
+    "scored_tracks": {
+      "description": "Playlist com suas músicas mais relevantes no momento."
+    }
+  },
+  "scopes": [
+    "user-read-recently-played",
+    "playlist-modify-public",
+    "playlist-modify-private",
+    "playlist-read-private",
+    "playlist-read-collaborative",
+    "user-library-read"
+  ]
+}

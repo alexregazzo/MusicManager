@@ -4,8 +4,8 @@ import typing
 
 import spotify.hints
 import utils
-from database.objects.base import Base
-from database.objects.exceptions import *
+from .base import Base
+from .exceptions import *
 
 logger = utils.get_logger(__file__)
 

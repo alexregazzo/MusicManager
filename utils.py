@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import datetime
 import hashlib
-import json
 import logging
 import logging.handlers
 import os
@@ -112,11 +111,6 @@ def getLogRootPath() -> str:
         os.makedirs(path, exist_ok=True)
         LOG_ROOT_PATH = path
     return LOG_ROOT_PATH
-
-
-def getMessages() -> dict:
-    with open(os.path.join(CURRENT_DIRPATH, "messages.json"), "r", encoding='utf8') as f:
-        return json.load(f)
 
 
 def getMultipleFromDict(dictionary: dict, keys: list, default: any = None):
