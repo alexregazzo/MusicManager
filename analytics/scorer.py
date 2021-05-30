@@ -8,6 +8,9 @@ import database.objects
 import utils
 
 
+# TODO: consider making the code cleaner
+# TODO: limit history more on last month, so the scores have a better effect
+
 class ScoredTrack(typing.TypedDict):
     tra_id: str
     score_played_amount: float

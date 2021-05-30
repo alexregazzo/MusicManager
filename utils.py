@@ -60,6 +60,7 @@ def hash_password(password: str, salt: str = gen_salt()) -> typing.Tuple[str, st
     return hashlib.sha256(bytes(password + salt, 'utf8')).hexdigest(), salt
 
 
+# TODO: think something better for logging... It's too much information!
 def get_logger(path: str, log_name: str = None, propagate: bool = False, always_debug: bool = True,
                max_size: typing.Union[int, None] = 5e6) -> logging.Logger:
     if log_name is None:
