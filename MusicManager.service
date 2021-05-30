@@ -1,10 +1,15 @@
 [Unit]
 Description=My service for website and app server
+After=network.target
+StartLimitBurst=10
+StartLimitIntervalSec=60
 
 [Service]
 Type=simple
-ExecStart=sudo python3.9 /home/pi/Desktop/MusicManager/app.py
 Restart=always
+RestartSec=2
+ExecStartPre=/home/pi/Desktop/MusicManager/venv/bin/pip3.9 install --upgrade -r /home/pi/Desktop/MusicManager/requirements.txt
+ExecStart=/home/pi/Desktop/MusicManager/venv/bin/python3.9 /home/pi/Desktop/MusicManager/app.py
 
 [Install]
 WantedBy=multi-user.target
